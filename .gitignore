@@ -1,0 +1,6 @@
+__pycache__
+.vscode
+.idea
+
+src/tasks/task-2-ml-modeling/TrainingData
+src/tasks/task-2-ml-modeling/TestData
