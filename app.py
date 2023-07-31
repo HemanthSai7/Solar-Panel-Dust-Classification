@@ -11,43 +11,26 @@ LABEL_DICT={
 
 st.set_page_config(layout="wide")
 st.title("Solar Panel Soiling Detection")
-st.text('This Web App is used to classify Clean vs Dusty solar module.')
-st.text("Choose Your Option: 1)Img_Upload 2)Img_URL")
-st.text("Choose Your Model : 1)DenseNet   2)AlexNet")
+st.sidebar.subheader('This Web App is used to classify Clean vs Dusty solar module.')
 
-def add_bg_from_url():
-    st.markdown(
-         f"""
-         <style>
-         .stApp {{
-             background-image: url("./assets/solar.jpg")
-             background-attachment: fixed;
-             background-size: cover
-         }}
-         </style>
-         """,
-         unsafe_allow_html=True
-     )
-
-add_bg_from_url() 
-
-
+model_name=st.sidebar.selectbox("Select the model",('EfficientNet','DenseNet','AlexNet'))
 method=st.sidebar.selectbox('Capture or Upload an Image',('Upload Image','Capture Image'))
+
 if method=='Upload Image':
-    image_file=st.file_uploader('Upload an Image',type=['jpg','png','jpeg'])
+    image_file=st.sidebar.file_uploader('Upload an Image',type=['jpg','png','jpeg'])
 else:
-    image_file=st.camera_input("Capture an Image")
+    image_file=st.sidebar.camera_input("Capture an Image")
 
 if image_file:
-    progress_bar=st.progress(0)
+    progress_bar=st.sidebar.progress(0)
     for i in range(100):
         time.sleep(0.001)
         progress_bar.progress(i+1)
-    st.info('Image uploaded successfully')
+    st.sidebar.info('Image uploaded successfully')
     st.image(image_file.getvalue())
 
 if image_file is not None:
-    ModelScript=ModelScript()
+    ModelScript=ModelScript(model_name=model_name)
     model=ModelScript.load_model()
     with st.spinner("Please wait..."):
         image=  ModelScript.preprocessing(image_file.getvalue())
@@ -56,3 +39,5 @@ if image_file is not None:
     st.success(LABEL_DICT[prediction])
 else:
     st.sidebar.warning("Please upload or capture an image")
+
+

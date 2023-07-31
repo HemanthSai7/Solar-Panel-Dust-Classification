@@ -1,16 +1,20 @@
+import cv2
+import numpy as np
+
+import streamlit as st
+
 import torch
 import torch.nn as nn
 from torchvision import models,transforms
 from efficientnet_pytorch import EfficientNet
-import streamlit as st
-import numpy as np
-import cv2
+
 class Config:
-    DIR='models'
+    DIR='./src/models'
 
 class ModelScript:
-    def __init__(self):
-        self.model_path=f'{Config.DIR}/EfficientNet_224_b3_0.pt'
+    def __init__(self,model_name):
+        self.model_name=model_name
+        self.model_path=f'{Config.DIR}/{self.model_name}.pt'
         self.input_shape=(128,128)
 
     @st.cache_resource   
@@ -18,7 +22,7 @@ class ModelScript:
         model=EfficientNet.from_pretrained(f'efficientnet-{model_name}') 
         model._fc=nn.Linear(in_features=model._fc.in_features,out_features=output,bias=True) 
         return model
- 
+    
     def load_model(self):
         model=ModelScript.Net()
         model.load_state_dict(torch.load(self.model_path,map_location=torch.device('cpu'))["model_state_dict"])
