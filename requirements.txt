@@ -5,5 +5,5 @@ torchvision
 efficientnet_pytorch
 opencv-python-headless
 albumentations
-efficientnet_pytorch
 catalyst
+streamlit-lottie

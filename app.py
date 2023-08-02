@@ -1,6 +1,11 @@
-import streamlit as st
+import json
 import time
 import numpy as np
+
+import requests
+import streamlit as st
+from streamlit_lottie import st_lottie
+
 from ModelScript import ModelScript
 
 LABEL_DICT={
@@ -11,9 +16,33 @@ LABEL_DICT={
 
 st.set_page_config(layout="wide")
 st.title("Solar Panel Soiling Detection")
+
+st.info('Machine learning approach to detect dust on solar panels in UAE a contribution toward optimizing cleaning plan.')
+
+def load_lottiefile(filepath:str):
+    with open(filepath,'r') as f:
+        return json.load(f)
+
+lottie_solar_code=load_lottiefile('src/assets/solar.json')
+
+col1,col2,col3=st.columns([1,4.5,0.2])
+with col2:
+    st_lottie(
+    lottie_solar_code,
+    speed=1,
+    reverse=True,
+    loop=True,
+    quality='high',
+    height=500,
+    width=500,
+    key='Knowledge Bank'
+)
+    
+
 st.sidebar.subheader('This Web App is used to classify Clean vs Dusty solar module.')
 
-model_name=st.sidebar.selectbox("Select the model",('EfficientNet','DenseNet','AlexNet'))
+
+model_name=st.sidebar.selectbox("Select the model",('EfficientNet','DenseNet','AlexNet'),help="More models will be added soon")
 method=st.sidebar.selectbox('Capture or Upload an Image',('Upload Image','Capture Image'))
 
 if method=='Upload Image':
