@@ -1,6 +1,8 @@
 import json
 import time
 import numpy as np
+from PIL import Image
+from io import BytesIO
 
 import requests
 import streamlit as st
@@ -101,4 +103,15 @@ if image_file is not None:
 else:
     st.sidebar.warning("Please upload or capture an image")
 
+# Download Button
+buf = BytesIO()
+img=Image.open('src/assets/OIP.jpeg')
+img.save(buf, format="JPEG")
+byte_im = buf.getvalue()
 
+st.sidebar.download_button(
+    label='Download Sample Image',
+    data=byte_im,
+    file_name='OIP.jpeg',
+    mime='image/jpeg'
+)
